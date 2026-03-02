@@ -23,18 +23,24 @@ game_speed = 50
 paused = False
 muted = False
 
+def find_bar_widths(arr_len, gap_len):
+    width_for_bars = WIDTH - 40  # bit of space on either side
+    width_for_bars -= gap_len * (arr_len - 1)
 
-def draw_array(surface, array, highlights, actions):
-    gap = 1  # pixels between bars
-    bar_width = ((WIDTH - 40) - (gap * (len(array)- 1))) / len(array)  # (bit of space on either side) - (number of gaps) / how many bars there are going to be
+    remaining_pixels = width_for_bars % arr_len
+    width_for_bars -= remaining_pixels
+
+    bar_width = width_for_bars // arr_len
+    return bar_width, remaining_pixels
+
+def draw_array(surface, array, highlights, actions, bar_width, gap_size):
     colour_per_idx = {}
-
     for i, colour in highlights:  
         colour_per_idx[i] = colour  # then anything not in the dict can default to white        
 
     for i, height in enumerate(array):
         colour = colour_per_idx.get(i, "white")
-        pygame.draw.rect(surface, colour, (((i * (bar_width + gap) + 20)), 650-height, bar_width, height))  
+        pygame.draw.rect(surface, colour, (((i * (bar_width + gap_size) + 20)), 650-height, bar_width, height))  
 
 def draw_buttons(buttons):
     for button in buttons:
@@ -78,7 +84,7 @@ def reset_sort(surface, chosen_sort, arr_len):
     array = sorting_logic.generate_array(1, arr_len)
     sort = sorts[chosen_sort](array)
     step = next(sort)
-    draw_array(surface, step.array, step.highlights, step.actions)
+    draw_array(surface, step.array, step.highlights, step.actions, bar_width, gap_len)
     pygame.display.flip()
     return array, sort, step
 
@@ -90,6 +96,8 @@ def mute_button_pressed(mute_btn):
 
 # logic vars
 arr_len = 650  # max of 650 since 650 sized bars hit the top of the screen
+gap_len = 1  #num pixels between bars
+bar_width, leftover_bar_pixels = find_bar_widths(arr_len, gap_len)
 chosen_sort = "selection"
 sorts = {"selection": sorting_logic.selection_sort,
          "bubble": sorting_logic.bubble_sort,
@@ -128,6 +136,8 @@ controls_box_texts = [(font, "Controls"),
 sort_info_box = pygame.Rect((btn_selection_sort.rect.x, 670, (pygame_gui.Button.width * 2) + 40, 390))
 
 
+
+
 # main loop
 while running:
 
@@ -151,7 +161,7 @@ while running:
             if "pass_done" in step.actions:
                 next_iteration -= ((game_speed + 12) * 10)
 
-    draw_array(screen, step.array, step.highlights, step.actions)
+    draw_array(screen, step.array, step.highlights, step.actions, bar_width, gap_len)
     draw_buttons(buttons)
     draw_controls_box(screen, controls_box, controls_box_texts)
     draw_sort_info_box(screen, sort_info_box, chosen_sort_btn, step.stats, font_sml)
@@ -178,7 +188,7 @@ while running:
                 new_step = next(sort, None)
                 if new_step is not None:
                     step = new_step
-                draw_array(screen, step.array, step.highlights, step.actions)
+                draw_array(screen, step.array, step.highlights, step.actions, bar_width, gap_len)
             elif event.key == pygame.K_m:
                 muted = mute_button_pressed(btn_mute)
 
