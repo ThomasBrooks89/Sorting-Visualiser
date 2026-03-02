@@ -89,7 +89,7 @@ def mute_button_pressed(mute_btn):
     return True  # sound is now unmuted
 
 # logic vars
-arr_len = 640  # max of 650 since 650 sized bars hit the top of the screen
+arr_len = 650  # max of 650 since 650 sized bars hit the top of the screen
 chosen_sort = "selection"
 sorts = {"selection": sorting_logic.selection_sort,
          "bubble": sorting_logic.bubble_sort,
@@ -130,6 +130,11 @@ sort_info_box = pygame.Rect((btn_selection_sort.rect.x, 670, (pygame_gui.Button.
 
 # main loop
 while running:
+
+    curr_fps = clock.get_fps()
+    if curr_fps < 60 and curr_fps > 0:
+        print(curr_fps)
+
     dt = clock.tick(FPS)
     screen.fill(BG_COLOUR)
 
@@ -142,6 +147,9 @@ while running:
         new_step = next(sort, None)
         if new_step is not None:
             step = new_step
+
+            if "pass_done" in step.actions:
+                next_iteration -= ((game_speed + 12) * 10)
 
     draw_array(screen, step.array, step.highlights, step.actions)
     draw_buttons(buttons)

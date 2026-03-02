@@ -12,11 +12,12 @@
 - [ ] Implement behaviour depending on 'actions'
 - [ ] Allow the user to change the array size
 - [ ] Implement sound
-- [ ] Finish the “sort stats” box:
-- [ ] Display current algorithm name
-- [ ] Display stats (comparisons, swaps, current gap, etc.)
+- [x] Finish the “sort stats” box:
+- [x] Display current algorithm name
+- [x] Display stats (comparisons, swaps, current gap, etc.)
 - [ ] Display current array size & speed
-- [ ] Add a faster mode (when the user wants speed over visuals)
+- [ ] Improve speed/FPS drops
+- [ ] Add brief explanations for each sort
 
 ## Bug fixes
 - [ ] Fix: every ~20th bar has a slightly bigger gap than it should
