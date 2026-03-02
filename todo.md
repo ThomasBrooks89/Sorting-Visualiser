@@ -20,4 +20,4 @@
 - [ ] Add brief explanations for each sort
 
 ## Bug fixes
-- [ ] Fix: every ~20th bar has a slightly bigger gap than it should
+- [x] Fix: every ~20th bar has a slightly bigger gap than it should
