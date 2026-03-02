@@ -9,6 +9,7 @@
 - [ ] Implement Heap sort
 
 ## Extras
+- [ ] Implement behaviour depending on 'actions'
 - [ ] Allow the user to change the array size
 - [ ] Implement sound
 - [ ] Finish the “sort stats” box:

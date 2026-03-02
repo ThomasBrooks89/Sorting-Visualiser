@@ -24,11 +24,9 @@ paused = False
 muted = False
 
 
-
-
 def draw_array(surface, array, highlights, actions):
     gap = 1  # pixels between bars
-    bar_width = ((WIDTH - 40) - (gap * (len(array)- 1))) / len(array)  # (bit of space on either side) - (rough number of gaps) // how many bars there are going to be
+    bar_width = ((WIDTH - 40) - (gap * (len(array)- 1))) / len(array)  # (bit of space on either side) - (number of gaps) / how many bars there are going to be
     colour_per_idx = {}
 
     for i, colour in highlights:  
@@ -60,8 +58,20 @@ def draw_controls_box(surface, controls_box, controls_box_texts):
     text_rect.y = (controls_box.y + controls_box.height) - 40
     surface.blit(text, text_rect)
 
-def draw_sort_info_box(surface, sort_info_box, chosen_sort_btn):
+def draw_sort_info_box(surface, sort_info_box, chosen_sort_btn, stats, font):
     pygame.draw.rect(surface, (75,75,75), sort_info_box, 4)
+    text = chosen_sort_btn.label
+    text_rect = text.get_rect()
+    text_rect.centerx = sort_info_box.centerx
+    surface.blit(text, (text_rect.x, sort_info_box.y + 20))
+
+    x = sort_info_box.x + 10
+    y = sort_info_box.y + 60
+    for stat in stats:
+        text = font.render(stat, True, "white")
+        surface.blit(text, (x, y))
+        y += 40
+
 
 
 def reset_sort(surface, chosen_sort, arr_len):
@@ -115,7 +125,7 @@ controls_box_texts = [(font, "Controls"),
                       (font_sml, "Esc: Quit")]
 
 # 'sort info' box setup
-sort_info_box = pygame.Rect((btn_selection_sort.rect.x, 670, (pygame_gui.Button.width * 3) + 40, 390))
+sort_info_box = pygame.Rect((btn_selection_sort.rect.x, 670, (pygame_gui.Button.width * 2) + 40, 390))
 
 
 # main loop
@@ -136,7 +146,7 @@ while running:
     draw_array(screen, step.array, step.highlights, step.actions)
     draw_buttons(buttons)
     draw_controls_box(screen, controls_box, controls_box_texts)
-    draw_sort_info_box(screen, sort_info_box, chosen_sort_btn)
+    draw_sort_info_box(screen, sort_info_box, chosen_sort_btn, step.stats, font_sml)
     pygame.display.flip()
     
         
@@ -176,7 +186,7 @@ while running:
 
         elif btn_reset.event(event):
             btn_reset.active = True
-            array, sort = reset_sort(screen, chosen_sort, arr_len)
+            array, sort, step = reset_sort(screen, chosen_sort, arr_len)
             btn_reset.active = False
         elif btn_mute.event(event):
             muted = mute_button_pressed(btn_mute)
