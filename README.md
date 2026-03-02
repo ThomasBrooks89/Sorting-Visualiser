@@ -2,23 +2,23 @@
 
 A Python/Pygame-CE visualiser for the most common sorting algorithms.
 
-Colours the bars based on what is happening, colours differ per algorithm but usually:
-Green: Bar is sorted
-Yellow: Bar is 'selected', usually either currently being worked with or saved by the algorithm
-White: Standard color for bars
-Grey: Not currently being considered
-Blue: Colour of multiple elements currently being compared
+Colours the bars based on what is happening, colours differ per algorithm but usually:  
+Green: Bar is sorted  
+Yellow: Bar is 'selected', usually either currently being worked with or saved by the algorithm  
+White: Standard color for bars  
+Grey: Not currently being considered  
+Blue: Colour of multiple elements currently being compared  
 
 
 ## Included sorting algorithms
 
-Selection sort - ✅
-Bubble sort - ✅
-Insertion sort - ✅
-Shell sort - ✅
-Merge sort - ❌ NYI
-Quicksort - ❌ NYI
-Heap sort - ❌ NYI
+Selection sort - ✅  
+Bubble sort - ✅  
+Insertion sort - ✅  
+Shell sort - ✅  
+Merge sort - ❌ NYI  
+Quicksort - ❌ NYI  
+Heap sort - ❌ NYI  
 
 
 ## Installation
