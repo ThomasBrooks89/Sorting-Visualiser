@@ -1,4 +1,5 @@
 import pygame
+import pygame_gui
 
 
 def find_bar_widths(arr_len, gap_len, window_width):
@@ -39,7 +40,7 @@ def draw_controls_box(surface, controls_box, controls_box_texts):
         surface.blit(text, (text_rect.x, y))
         y += 40
     
-    text = font.render("Thomas Loves Jen", True, "deeppink3")
+    text = pygame_gui.stitch_text([("Thomas ", "white"), ("loves ", "deeppink3"), ("Jen", "white")], font)
     text_rect = text.get_rect()
     text_rect.centerx = box_centre
     text_rect.y = (controls_box.y + controls_box.height) - 40
@@ -60,9 +61,23 @@ def draw_sort_info_box(surface, sort_info_box, chosen_sort_btn, stats, font):
         surface.blit(text, (x, y))
         y += 40
 
-
-def draw_config_box(surface, config_box):
+speeds = {0:"Max", 25:"Fast", 50:"Normal", 75:"Slow", 100:"Min"}
+def draw_config_box(surface, config_box, array_size, game_speed, shuffle_type, font):
     pygame.draw.rect(surface, (75,75,75), config_box, 4)
+    if array_size == 650:
+        array_size = "650 (MAX)"
+    elif array_size == 50:
+        array_size = "50 (MIN)"
+    configs = [f"Sort Speed    (K/L): {speeds[game_speed]}", 
+               f"Array Size     (A/D): {array_size}",
+               f"Shuffle Type (Q/E): {shuffle_type}"]
+    
+    x = config_box.x + 15
+    y = config_box.y + 30
+    for c in configs:
+        text = font.render(c, True, "white")
+        surface.blit(text, (x, y))
+        y += 40
 
 
 def draw_sort_explanation_box(surface, sort_explanation_box):

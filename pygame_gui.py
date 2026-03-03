@@ -53,3 +53,26 @@ def draw_plus(surface, colour, size, x, y, width):
     offset = size // 2
     pygame.draw.line(surface, colour, (x - offset, y), (x + offset, y), width)
     pygame.draw.line(surface, colour, (x, y - offset), (x, y + offset), width)
+
+
+def stitch_text(text_list, font):  # list of (text string, colour) tuples
+    # render all the strings
+    rendered_texts = []
+    for string, colour in text_list:
+         rendered_text = font.render(string, True, colour)
+         rendered_texts.append(rendered_text)
+
+    # work out the size of the strings all together
+    width, height = 0, 0
+    for text in rendered_texts:
+        width += text.get_width()
+        height = max(height, text.get_height())
+
+    # create the surface to blit the strings, and blit them all to it
+    text_surface = pygame.surface.Surface((width, height), pygame.SRCALPHA)
+    x = 0
+    for text in rendered_texts:
+        text_surface.blit(text, (x, (height - text.get_height())))
+        x += text.get_width()
+
+    return text_surface

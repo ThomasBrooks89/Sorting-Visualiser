@@ -84,11 +84,13 @@ sorts = {"selection": sorting_logic.selection_sort,
 array = sorting_logic.generate_array(1, arr_len)
 sort = sorts[chosen_sort](array)
 step = next(sort, None)
+shuffle_next = {"random":"", "reverse":"", "almost_sorted":""} # TODO
+shuffle_prev = {"random":"", "reverse":"", "almost_sorted":""} # TODO
+shuffle_type = "TODO"
 
 
 # main loop
 while running:
-
     curr_fps = clock.get_fps()
     if curr_fps < 60 and curr_fps > 0:
         print(curr_fps)
@@ -113,7 +115,7 @@ while running:
     drawing.draw_buttons(buttons)
     drawing.draw_controls_box(screen, controls_box, controls_box_texts)
     drawing.draw_sort_info_box(screen, sort_info_box, chosen_sort_btn, step.stats, font_sml)
-    drawing.draw_config_box(screen, config_box)
+    drawing.draw_config_box(screen, config_box, arr_len, game_speed, shuffle_type, font_sml)
     drawing.draw_sort_explanation_box(screen, sort_explanation_box)
     pygame.display.flip()
     
@@ -131,7 +133,8 @@ while running:
                 if game_speed > 0:
                     game_speed -= 25
             elif event.key == pygame.K_k:
-                game_speed += 25
+                if game_speed < 100:
+                     game_speed += 25
             elif event.key == pygame.K_SPACE:
                 paused = not paused
             elif event.key == pygame.K_s:
@@ -141,6 +144,16 @@ while running:
                 drawing.draw_array(screen, step.array, step.highlights, step.actions, bar_width, gap_len)
             elif event.key == pygame.K_m:
                 muted = mute_button_pressed(btn_mute)
+            elif event.key == pygame.K_a:
+                if arr_len > 50:
+                    arr_len -= 50
+                    bar_width, leftover_bar_pixels = drawing.find_bar_widths(arr_len, gap_len, WIDTH)
+                    array, sort, step = reset_sort(screen, chosen_sort, arr_len)
+            elif event.key == pygame.K_d:
+                if arr_len < 650:
+                    arr_len += 50
+                    bar_width, leftover_bar_pixels = drawing.find_bar_widths(arr_len, gap_len, WIDTH)
+                    array, sort, step = reset_sort(screen, chosen_sort, arr_len)
 
             elif event.key == pygame.K_1:
                 chosen_sort = "selection"
