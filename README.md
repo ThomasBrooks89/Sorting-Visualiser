@@ -33,7 +33,7 @@ pip install -r requirements.txt
 ## To run
 
 ```bash
-python drawing.py
+python main.py
 ```
 
 

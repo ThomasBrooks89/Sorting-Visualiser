@@ -1,7 +1,7 @@
 # TODO (rough order of importance)
 
 ## Critical
-- [ ] Move non-drawing logic out of `drawing.py` into `main.py`
+- [x] Move non-drawing logic out of `drawing.py` into `main.py`
 
 ## Algorithms
 - [ ] Implement Merge sort
