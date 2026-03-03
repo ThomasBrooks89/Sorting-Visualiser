@@ -1,7 +1,7 @@
 # TODO (rough order of importance)
 
 ## Critical
-- [ ] Move non-drawing logic out of `drawing.py` into `main.py` (keep `drawing.py` mostly rendering + input)
+- [ ] Move non-drawing logic out of `drawing.py` into `main.py`
 
 ## Algorithms
 - [ ] Implement Merge sort
@@ -21,3 +21,4 @@
 
 ## Bug fixes
 - [x] Fix: every ~20th bar has a slightly bigger gap than it should
+- [ ] Fix: Switching sorts using 1-7 keys doesn't set the coorrosponding button to active
