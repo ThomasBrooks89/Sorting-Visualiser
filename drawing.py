@@ -38,7 +38,7 @@ def draw_controls_box(surface, controls_box, controls_box_texts):
         text_rect = text.get_rect()  # make a box around the text, to find its centre
         text_rect.centerx = box_centre  # the centre of the text is the centre of the box
         surface.blit(text, (text_rect.x, y))
-        y += 40
+        y += 30
     
     text = pygame_gui.stitch_text([("Thomas ", "white"), ("loves ", "deeppink3"), ("Jen", "white")], font)
     text_rect = text.get_rect()

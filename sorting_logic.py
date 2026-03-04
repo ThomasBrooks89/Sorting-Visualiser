@@ -9,10 +9,30 @@ class NextStep:
     stats: list[str] = field(default_factory = list)  # list of strings of whatever stat/info is to be shown
     
 
-def generate_array(min, max):
+def generate_array(min, max, sort_type):
     array = [x for x in range(min, (max + 1))]
-    random.shuffle(array)
+
+    if sort_type == "Almost Sorted":
+        return tiny_shuffle(array)
+    
+    if sort_type == "Reversed":
+        array.reverse()
+        return array
+    
+    random.shuffle(array)  # sort type == random
     return array
+
+def tiny_shuffle(array):
+    length = len(array)
+    num_swaps, max_swap_dist = length // 50, length // 10
+    highest_idx = length - max_swap_dist 
+
+    for _ in range(num_swaps):
+        i = random.randint(1, highest_idx)
+        j = i + (random.randint(1, max_swap_dist))
+        array[i], array[j] = array[j], array[i]
+    return array
+
 
 
 def send_finished_array(array):  # completely fakes the 'checking' to 'make sure' the list is sorted at the end
@@ -162,7 +182,7 @@ def shell_sort(array):
 
         
 if __name__ == "__main__":
-    array = generate_array(1, 100)
+    array = generate_array(1, 100, "Random")
     #for step in selection_sort(array):
         #print(step.array)
     print(array)
