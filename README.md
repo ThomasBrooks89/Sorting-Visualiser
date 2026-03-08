@@ -16,7 +16,7 @@ Selection sort - ✅
 Bubble sort - ✅  
 Insertion sort - ✅  
 Shell sort - ✅  
-Merge sort - ❌ NYI  
+Merge sort - ✅ 
 Quicksort - ❌ NYI  
 Heap sort - ❌ NYI  
 
