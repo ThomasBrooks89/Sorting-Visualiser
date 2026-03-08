@@ -4,7 +4,7 @@
 - [x] Move non-drawing logic out of `drawing.py` into `main.py`
 
 ## Algorithms
-- [ ] Implement Merge sort
+- [x] Implement Merge sort
 - [ ] Implement Quicksort
 - [ ] Implement Heap sort
 
@@ -21,5 +21,5 @@
 
 ## Bug fixes
 - [x] Fix: every ~20th bar has a slightly bigger gap than it should
-- [ ] Fix: Switching sorts using 1-7 keys doesn't set the coorrosponding button to active
+- [x] Fix: Switching sorts using 1-7 keys doesn't set the corrosponding button to active
 - [ ] Fix: Some array lengths don't fill the width of the screen (the bar gap fix didn't work!)

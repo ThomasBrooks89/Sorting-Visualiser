@@ -78,14 +78,35 @@ def mute_button_pressed(mute_btn):
 arr_len = 650  # max of 650 since 650 sized bars hit the top of the screen
 gap_len = 1  #num pixels between bars
 bar_width, leftover_bar_pixels = drawing.find_bar_widths(arr_len, gap_len, WIDTH)
-chosen_sort = "selection"
-sorts = {"selection": sorting_logic.selection_sort,
-         "bubble": sorting_logic.bubble_sort,
-         "insertion": sorting_logic.insertion_sort,
-         "shell": sorting_logic.shell_sort}
+
+chosen_sort = "Selection Sort"
+sorts = {"Selection Sort": sorting_logic.selection_sort,
+         "Bubble Sort": sorting_logic.bubble_sort,
+         "Insertion Sort": sorting_logic.insertion_sort,
+         "Shell Sort": sorting_logic.shell_sort,
+         "Merge Sort": sorting_logic.merge_sort,
+         "Quicksort": "sorting_logic.quicksort",  # TODO
+         "Heap Sort": "sorting_logic.heap_sort"}  # TODO
+
 shuffle_next = {"Random":"Reversed", "Reversed":"Almost Sorted", "Almost Sorted":"Random"}
 shuffle_prev = {"Random":"Almost Sorted", "Reversed":"Random", "Almost Sorted":"Reversed"}
 shuffle_type = "Random"
+
+sorts_kb_shortcuts = {pygame.K_1: btn_selection_sort,
+                      pygame.K_KP1: btn_selection_sort,
+                      pygame.K_2: btn_bubble_sort,
+                      pygame.K_KP2: btn_bubble_sort,
+                      pygame.K_3: btn_insertion_sort,
+                      pygame.K_KP3: btn_insertion_sort ,
+                      pygame.K_4: btn_shell_sort,
+                      pygame.K_KP4: btn_shell_sort,
+                      pygame.K_5: btn_merge_sort,
+                      pygame.K_KP5: btn_merge_sort,
+                      pygame.K_6: btn_quicksort,
+                      pygame.K_KP6: btn_quicksort,
+                      pygame.K_7: btn_heap_sort,
+                      pygame.K_KP7:btn_heap_sort,}
+
 array = sorting_logic.generate_array(1, arr_len, shuffle_type)
 sort = sorts[chosen_sort](array)
 step = next(sort, None)
@@ -111,7 +132,7 @@ while running:
             step = new_step
 
             if "pass_done" in step.actions:
-                next_iteration -= ((game_speed + 10) * 8)
+                next_iteration -= ((game_speed + 10) * 5)
 
     drawing.draw_array(screen, step.array, step.highlights, step.actions, bar_width, gap_len)
     drawing.draw_buttons(buttons)
@@ -163,47 +184,25 @@ while running:
                 shuffle_type = shuffle_next[shuffle_type]
                 array, sort, step = reset_sort(screen, chosen_sort, arr_len, shuffle_type)
 
-            elif event.key == pygame.K_1:
-                chosen_sort = "selection"
-                array, sort, step = reset_sort(screen, chosen_sort, arr_len, shuffle_type)
-            elif event.key == pygame.K_2:
-                chosen_sort = "bubble"
-                array, sort, step = reset_sort(screen, chosen_sort, arr_len, shuffle_type)
-            elif event.key == pygame.K_3:
-                chosen_sort = "insertion"
+            elif event.key in sorts_kb_shortcuts:
+                chosen_sort_btn.active = False
+                chosen_sort_btn = sorts_kb_shortcuts[event.key]
+                chosen_sort_btn.active = True
+                chosen_sort = chosen_sort_btn.label_str
                 array, sort, step = reset_sort(screen, chosen_sort, arr_len, shuffle_type)
 
         elif btn_reset.event(event):
-            btn_reset.active = True
             array, sort, step = reset_sort(screen, chosen_sort, arr_len, shuffle_type)
-            btn_reset.active = False
         elif btn_mute.event(event):
             muted = mute_button_pressed(btn_mute)
 
-        elif btn_selection_sort.event(event):
-            chosen_sort_btn.active = False
-            chosen_sort_btn = btn_selection_sort
-            chosen_sort_btn.active = True
-            chosen_sort = "selection"
-            array, sort, step = reset_sort(screen, chosen_sort, arr_len, shuffle_type)
-        elif btn_bubble_sort.event(event):
-            chosen_sort_btn.active = False
-            chosen_sort_btn = btn_bubble_sort
-            chosen_sort_btn.active = True
-            chosen_sort = "bubble"
-            array, sort, step = reset_sort(screen, chosen_sort, arr_len, shuffle_type)
-        elif btn_insertion_sort.event(event):
-            chosen_sort_btn.active = False
-            chosen_sort_btn = btn_insertion_sort
-            chosen_sort_btn.active = True
-            chosen_sort = "insertion"
-            array, sort, step = reset_sort(screen, chosen_sort, arr_len, shuffle_type)
-        elif btn_shell_sort.event(event):
-            chosen_sort_btn.active = False
-            chosen_sort_btn = btn_shell_sort
-            chosen_sort_btn.active = True
-            chosen_sort = "shell"
-            array, sort, step = reset_sort(screen, chosen_sort, arr_len, shuffle_type)
+        for button in buttons[:7]:  # first 7 buttons, all the buttons that choose which sort the user wants
+            if button.event(event):
+                chosen_sort_btn.active = False
+                chosen_sort_btn = button
+                chosen_sort_btn.active = True
+                chosen_sort = button.label_str
+                array, sort, step = reset_sort(screen, chosen_sort, arr_len, shuffle_type)
         
 
 

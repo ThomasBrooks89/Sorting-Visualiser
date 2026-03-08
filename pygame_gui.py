@@ -7,6 +7,7 @@ class Button():
     def __init__(self, surface, x, y, label, font):
         self.surface = surface
         self.rect = pygame.Rect(x, y, self.width, self.height)
+        self.label_str = label
         self.label = font.render(label, True, "white")
         self.font = font
         self.mouseover = False

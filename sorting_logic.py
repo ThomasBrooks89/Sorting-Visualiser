@@ -174,6 +174,83 @@ def shell_sort(array):
     yield from send_finished_array(array)
 
 
+def merge_sort(array):
+    comparisons, swaps = 0, 0
+    subarray_size = 1
+    arr_size = len(array)
+
+    subarray_a, subarray_b = [], []
+    while len(subarray_a) + len(subarray_b) < arr_size: 
+        arr_size_remaining = arr_size
+        subarray_start_pos = 0
+
+        while arr_size_remaining > 0: 
+
+            # make 2 subarrays 
+            # colour the 2 subarrays
+            highlights = [(x, "deepskyblue2") for x in range(subarray_start_pos, subarray_start_pos + subarray_size)]
+            for x in range(subarray_start_pos + subarray_size, subarray_start_pos + subarray_size + subarray_size):
+                highlights.append((x, "deepskyblue4"))
+            yield NextStep(array[:], highlights, [], [f"Comparisons: {comparisons}", f"Swaps: {swaps}", f"Subarray size: {subarray_size}", f"Subarrays starting at index: {subarray_start_pos}"])
+
+            # actually make them
+            if arr_size_remaining < subarray_size:  # can't make a 'full' subarray, just use what's left
+                subarray_a = array[subarray_start_pos:]
+                arr_size_remaining = 0
+            else:
+                subarray_a = array[subarray_start_pos:subarray_start_pos+subarray_size]
+                arr_size_remaining -= subarray_size
+
+            if arr_size_remaining < subarray_size:
+                subarray_b = array[subarray_start_pos + subarray_size:]
+                arr_size_remaining = 0
+            else:
+                subarray_b = array[subarray_start_pos + subarray_size: subarray_start_pos + subarray_size + subarray_size] 
+                arr_size_remaining -= subarray_size
+
+            # merge the subarrays together, overwriting the main array as we go
+            a_i, b_i = 0, 0
+            a_len, b_len = len(subarray_a), len(subarray_b)
+
+            while (a_i != a_len) or (b_i != b_len):  # until both subarrays have been merged
+
+                if b_i == b_len:  # subarray b is done...
+                    while a_i != a_len:  #  ... so just loop through subarray a till it is also done
+                        swaps += 1
+                        array[subarray_start_pos] = subarray_a[a_i]
+                        highlights.append((subarray_start_pos, "green4"))
+                        a_i += 1
+                        subarray_start_pos += 1
+                        yield NextStep(array[:], highlights, [], [f"Comparisons: {comparisons}", f"Swaps: {swaps}", f"Subarray size: {subarray_size}", f"Subarrays starting at index: {subarray_start_pos}"])
+
+                elif a_i == a_len:  # same as above but a is done
+                    while b_i != b_len:  #  ... so just loop through subarray a till it is also done
+                        swaps += 1
+                        array[subarray_start_pos] = subarray_b[b_i]
+                        highlights.append((subarray_start_pos, "green4"))
+                        b_i += 1
+                        subarray_start_pos += 1
+                        yield NextStep(array[:], highlights, [], [f"Comparisons: {comparisons}", f"Swaps: {swaps}", f"Subarray size: {subarray_size}", f"Subarrays starting at index: {subarray_start_pos}"])
+
+                else:
+                    comparisons += 1
+                    swaps += 1
+                    if subarray_a[a_i] <= subarray_b[b_i]:
+                        array[subarray_start_pos] = subarray_a[a_i]
+                        highlights.append((subarray_start_pos, "green4"))
+                        a_i += 1
+                        subarray_start_pos += 1
+                        yield NextStep(array[:], highlights, [], [f"Comparisons: {comparisons}", f"Swaps: {swaps}", f"Subarray size: {subarray_size}", f"Subarrays starting at index: {subarray_start_pos}"])
+                    else:  # b > a
+                        array[subarray_start_pos] = subarray_b[b_i]
+                        highlights.append((subarray_start_pos, "green4"))
+                        b_i += 1
+                        subarray_start_pos += 1
+                        yield NextStep(array[:], highlights, [], [f"Comparisons: {comparisons}", f"Swaps: {swaps}", f"Subarray size: {subarray_size}", f"Subarrays starting at index: {subarray_start_pos}"])
+            
+        subarray_size *= 2
+        yield NextStep(array[:], highlights, ["pass_done"], [f"Comparisons: {comparisons}", f"Swaps: {swaps}", f"Subarray size: {subarray_size}", f"Subarrays starting at index: {subarray_start_pos}"])
+    yield from send_finished_array(array)
 
 
 
@@ -182,10 +259,7 @@ def shell_sort(array):
 
         
 if __name__ == "__main__":
-    array = generate_array(1, 100, "Random")
-    #for step in selection_sort(array):
-        #print(step.array)
+    array = generate_array(1, 564, "Random")
     print(array)
-    print(shell_sort(array))
-
+    print(merge_sort(array))
 
