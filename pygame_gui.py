@@ -49,7 +49,6 @@ class Button():
         return False
 
 
-
 def draw_plus(surface, colour, size, x, y, width):
     offset = size // 2
     pygame.draw.line(surface, colour, (x - offset, y), (x + offset, y), width)

@@ -5,7 +5,7 @@
 
 ## Algorithms
 - [x] Implement Merge sort
-- [ ] Implement Quicksort
+- [x] Implement Quicksort
 - [ ] Implement Heap sort
 
 ## Extras

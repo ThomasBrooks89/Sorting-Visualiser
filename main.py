@@ -85,7 +85,7 @@ sorts = {"Selection Sort": sorting_logic.selection_sort,
          "Insertion Sort": sorting_logic.insertion_sort,
          "Shell Sort": sorting_logic.shell_sort,
          "Merge Sort": sorting_logic.merge_sort,
-         "Quicksort": "sorting_logic.quicksort",  # TODO
+         "Quicksort": sorting_logic.quicksort,
          "Heap Sort": "sorting_logic.heap_sort"}  # TODO
 
 shuffle_next = {"Random":"Reversed", "Reversed":"Almost Sorted", "Almost Sorted":"Random"}

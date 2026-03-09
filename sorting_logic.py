@@ -39,7 +39,7 @@ def send_finished_array(array):  # completely fakes the 'checking' to 'make sure
     for i in range(len(array)):
         highlights = [(x, "green2") for x in range(i)]
         highlights.append((i, "yellow"))
-        yield NextStep(array[:], highlights, [], [f"Confirmed Correct: {i}"])
+        yield NextStep(array[:], highlights, [], [f"Confirmed correct: {i}"])
     highlights[-1] = ((len(array) - 1, "green2"))
     yield NextStep(array[:], highlights, ["finished"], ["Confirmed correct: Full array!"])
 
@@ -252,14 +252,81 @@ def merge_sort(array):
         yield NextStep(array[:], highlights, ["pass_done"], [f"Comparisons: {comparisons}", f"Swaps: {swaps}", f"Subarray size: {subarray_size}", f"Subarrays starting at index: {subarray_start_pos}"])
     yield from send_finished_array(array)
 
+qs_swaps, qs_comparisons = 0, 0
+def quicksort(array, left=None, right=None, highlights=None, depth=0):
+    global qs_swaps, qs_comparisons
+    
+    # if this is the first call
+    if left is None:
+        left = 0
+        right = len(array) - 1
+        highlights = []  # fix the issue of everything staying green when resetting the visualiser
 
+    # the chunk to be pivoted is too small
+    if right - left < 1:
+        highlights.append((right, "green2"))
+        yield NextStep(array[:], highlights, ["pass_done"], [f"Comparisons: {qs_comparisons}", f"Swaps: {qs_swaps}", f"Pivot index: {right}", f"Recursion depth: {depth}"])
+        return
+    
+    # pivot
+    pivot_value = array[right]  # pivot around the last element in the chunk
+    highlights.append((right, "yellow"))
+    yield NextStep(array[:], highlights, [], [f"Comparisons: {qs_comparisons}", f"Swaps: {qs_swaps}", f"Pivot index: {right}", f"Recursion depth: {depth}"])
 
+    # find i and j
+    i, j = left, right - 1
+    while True:
+        highlights.append((i, "deepskyblue2"))
+        yield NextStep(array[:], highlights, [], [f"Comparisons: {qs_comparisons}", f"Swaps: {qs_swaps}", f"Pivot index: {right}", f"Recursion depth: {depth}"])
+        while array[i] < pivot_value:  # find the leftmost element larger than the pivot
+            highlights.pop()
+            qs_comparisons += 1
+            i += 1
+            highlights.append((i, "deepskyblue2"))
+            yield NextStep(array[:], highlights, [], [f"Comparisons: {qs_comparisons}", f"Swaps: {qs_swaps}", f"Pivot index: {right}", f"Recursion depth: {depth}"])
 
-
-
+        highlights.append((j, "deepskyblue2"))
+        yield NextStep(array[:], highlights, [], [f"Comparisons: {qs_comparisons}", f"Swaps: {qs_swaps}", f"Pivot index: {right}", f"Recursion depth: {depth}"])
+        while array[j] > pivot_value:  # rightmost element smaller than pivot
+            highlights.pop()
+            qs_comparisons += 1
+            j -= 1
+            highlights.append((j, "deepskyblue2"))
+            yield NextStep(array[:], highlights, [], [f"Comparisons: {qs_comparisons}", f"Swaps: {qs_swaps}", f"Pivot index: {right}", f"Recursion depth: {depth}"])
         
+        # remove the blue colour from i and j
+        highlights.pop()
+        highlights.pop()
+        if i >= j:
+            break
+
+        # swap i and j
+        highlights.append((i, "green4"))
+        highlights.append((j, "green4"))
+        yield NextStep(array[:], highlights, [], [f"Comparisons: {qs_comparisons}", f"Swaps: {qs_swaps}", f"Pivot index: {right}", f"Recursion depth: {depth}"])
+        array[i], array[j] = array[j], array[i]
+        qs_swaps += 1
+        yield NextStep(array[:], highlights, ["swap"], [f"Comparisons: {qs_comparisons}", f"Swaps: {qs_swaps}", f"Pivot index: {right}", f"Recursion depth: {depth}"])
+        highlights.pop()
+        highlights.pop()
+
+    # place the pivot where it goes
+    qs_swaps += 1
+    array[right], array[i] = array[i], array[right]
+    highlights.append((i, "green2"))
+    highlights.append((right, "white"))
+    yield NextStep(array[:], highlights, ["pass_done"], [f"Comparisons: {qs_comparisons}", f"Swaps: {qs_swaps}", f"Pivot index: {right}", f"Recursion depth: {depth}"])
+
+    # recurse on the left and right subchunks of the pivot
+    yield from quicksort(array, left, i-1, highlights, depth+1)
+    yield from quicksort(array, i+1, right, highlights, depth+1)
+
+    if depth == 0:
+        yield from send_finished_array(array)
+
+     
 if __name__ == "__main__":
-    array = generate_array(1, 564, "Random")
+    array = generate_array(1, 50, "Random")
     print(array)
-    print(merge_sort(array))
+    print(quicksort(array))
 
