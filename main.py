@@ -64,7 +64,7 @@ def reset_sort(surface, chosen_sort, arr_len, shuffle_type):
     array = sorting_logic.generate_array(1, arr_len, shuffle_type)
     sort = sorts[chosen_sort](array)
     step = next(sort)
-    drawing.draw_array(surface, step.array, step.highlights, step.actions, bar_width, gap_len)
+    drawing.draw_array(surface, step.array, step.highlights, step.actions, bar_width, gap_len, remaining_pixels)
     pygame.display.flip()
     return array, sort, step
 
@@ -77,7 +77,7 @@ def mute_button_pressed(mute_btn):
 # logic vars
 arr_len = 650  # max of 650 since 650 sized bars hit the top of the screen
 gap_len = 1  #num pixels between bars
-bar_width, leftover_bar_pixels = drawing.find_bar_widths(arr_len, gap_len, WIDTH)
+bar_width, remaining_pixels = drawing.find_bar_widths(arr_len, gap_len, WIDTH)
 
 chosen_sort = "Selection Sort"
 sorts = {"Selection Sort": sorting_logic.selection_sort,
@@ -134,7 +134,7 @@ while running:
             if "pass_done" in step.actions:
                 next_iteration -= ((game_speed + 10) * 5)
 
-    drawing.draw_array(screen, step.array, step.highlights, step.actions, bar_width, gap_len)
+    drawing.draw_array(screen, step.array, step.highlights, step.actions, bar_width, gap_len, remaining_pixels)
     drawing.draw_buttons(buttons)
     drawing.draw_controls_box(screen, controls_box, controls_box_texts)
     drawing.draw_sort_info_box(screen, sort_info_box, chosen_sort_btn, step.stats, font_sml)
@@ -164,18 +164,18 @@ while running:
                 new_step = next(sort, None)
                 if new_step is not None:
                     step = new_step
-                drawing.draw_array(screen, step.array, step.highlights, step.actions, bar_width, gap_len)
+                drawing.draw_array(screen, step.array, step.highlights, step.actions, bar_width, gap_len, remaining_pixels)
             elif event.key == pygame.K_m:
                 muted = mute_button_pressed(btn_mute)
             elif event.key == pygame.K_a:
                 if arr_len > 50:
                     arr_len -= 50
-                    bar_width, leftover_bar_pixels = drawing.find_bar_widths(arr_len, gap_len, WIDTH)
+                    bar_width, remaining_pixels = drawing.find_bar_widths(arr_len, gap_len, WIDTH)
                     array, sort, step = reset_sort(screen, chosen_sort, arr_len, shuffle_type)
             elif event.key == pygame.K_d:
                 if arr_len < 650:
                     arr_len += 50
-                    bar_width, leftover_bar_pixels = drawing.find_bar_widths(arr_len, gap_len, WIDTH)
+                    bar_width, remaining_pixels = drawing.find_bar_widths(arr_len, gap_len, WIDTH)
                     array, sort, step = reset_sort(screen, chosen_sort, arr_len, shuffle_type)
             elif event.key == pygame.K_q:
                 shuffle_type = shuffle_prev[shuffle_type]

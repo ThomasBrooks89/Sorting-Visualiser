@@ -13,14 +13,14 @@ def find_bar_widths(arr_len, gap_len, window_width):
     return bar_width, remaining_pixels
 
 
-def draw_array(surface, array, highlights, actions, bar_width, gap_size):
+def draw_array(surface, array, highlights, actions, bar_width, gap_size, remaining_pixels):
     colour_per_idx = {}
     for i, colour in highlights:  
         colour_per_idx[i] = colour  # then anything not in the dict can default to white        
 
     for i, height in enumerate(array):
         colour = colour_per_idx.get(i, "white")
-        pygame.draw.rect(surface, colour, (((i * (bar_width + gap_size) + 20)), 650-height, bar_width, height))  
+        pygame.draw.rect(surface, colour, (((i * (bar_width + gap_size) + (remaining_pixels//2))), 650-height, bar_width, height))  
 
 
 def draw_buttons(buttons):
